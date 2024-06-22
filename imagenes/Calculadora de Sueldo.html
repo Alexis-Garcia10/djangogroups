@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sueldo</title>
+    <style>
+        /* Estilos CSS aquí */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .box {
+            width: 300px;
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .dashed {
+            border: 3px dashed black;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .dashed p {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <form action="http://127.0.0.1:5500/index.html#" method="POST" id="formulario" onsubmit="return false;">
+            <h1>Calculadora de Sueldo</h1>
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" required="">
+
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" name="apellidos" id="apellidos" required="">
+
+            <label for="edad">Edad:</label>
+            <input type="number" name="edad" id="edad" required="">
+
+            <label for="horas_trabajadas">Horas Trabajadas:</label>
+            <input type="number" name="horas_trabajadas" id="horas_trabajadas" required="">
+
+            <label for="cargo">Cargo:</label>
+            <select name="cargo" id="cargo" required="">
+                <option value="" selected="" disabled="">Seleccione una opción</option>
+                <option value="ingeniero">Ingeniero</option>
+                <option value="secretario">Secretario</option>
+                <option value="licenciado">Licenciado</option>
+            </select>            
+
+            <label for="vacaciones">Días de Vacaciones:</label>
+            <input type="number" name="vacaciones" id="vacaciones" required="">
+
+            <label for="bono_extra">Bono Extra:</label>
+            <input type="number" name="bono_extra" id="bono_extra" required="">
+
+            <input type="submit" value="Calcular Sueldo" id="submit">
+        </form>
+    </div>
+
+    <div class="box dashed" id="resultado">
+        <h3>Información del Sueldo</h3>
+        <hr>
+        <p id="p_nombre">
+            Nombre: <span></span>
+        </p>
+        <p id="p_apellidos">
+            Apellidos: <span></span>
+        </p>
+        <p id="p_edad">
+            Edad: <span></span>
+        </p>
+        <p id="p_horas_trabajadas">
+            Horas Trabajadas: <span></span>
+        </p>
+        <p id="p_cargo">
+            Cargo: <span></span>
+        </p>
+        <p id="p_vacaciones">
+            Días de Vacaciones: <span></span>
+        </p>
+        <p id="p_bono_extra">
+            Bono Extra: <span></span> USD
+        </p>
+        <p id="p_sueldo">
+            Sueldo Total: <span></span> USD
+        </p>
+    </div>
+
+    <script>
+        'use strict';
+
+        window.addEventListener('load', function () {
+            console.log("DOM cargado!!");
+
+            var formulario = document.querySelector("#formulario");
+            var box_dashed = document.querySelector("#resultado");
+
+            formulario.addEventListener('submit', function () {
+                console.log("Evento submit capturado");
+
+                var nombre = document.querySelector("#nombre").value;
+                var apellidos = document.querySelector("#apellidos").value;
+                var edad = parseInt(document.querySelector("#edad").value);
+                var horasTrabajadas = parseInt(document.querySelector("#horas_trabajadas").value);
+                var cargo = document.querySelector("#cargo").value;
+                var vacaciones = parseInt(document.querySelector("#vacaciones").value);
+                var bonoExtra = parseInt(document.querySelector("#bono_extra").value);
+
+                // Validaciones
+                if (nombre.trim() === '') {
+                    alert("Por favor, ingrese el nombre.");
+                    return false;
+                }
+
+                if (apellidos.trim() === '') {
+                    alert("Por favor, ingrese los apellidos.");
+                    return false;
+                }
+
+                if (isNaN(edad) || edad <= 0) {
+                    alert("Por favor, ingrese una edad válida.");
+                    return false;
+                }
+
+                if (isNaN(horasTrabajadas) || horasTrabajadas <= 0) {
+                    alert("Por favor, ingrese un número válido de horas trabajadas.");
+                    return false;
+                }
+
+                if (cargo !== 'ingeniero' && cargo !== 'secretario' && cargo !== 'licenciado') {
+                    alert("Por favor, seleccione un cargo válido.");
+                    return false;
+                }
+
+                if (isNaN(vacaciones) || vacaciones < 0) {
+                    alert("Por favor, ingrese un número válido de días de vacaciones.");
+                    return false;
+                }
+
+                if (isNaN(bonoExtra) || bonoExtra < 0) {
+                    alert("Por favor, ingrese un monto válido para el bono extra.");
+                    return false;
+                }
+
+                // Calcular sueldo
+                var sueldoBase = horasTrabajadas * 10; // $10 por hora (puedes ajustar este valor)
+                var bono = 0;
+
+                if (cargo === 'ingeniero') {
+                    bono = 1000; // Bono de $1000 para ingenieros
+                } else if (cargo === 'secretario') {
+                    bono = 500; // Bono de $500 para secretarios
+                } else if (cargo === 'licenciado') {
+                    bono = 800; // Bono de $800 para licenciados
+                }
+
+                var sueldoTotal = sueldoBase + bono + bonoExtra - (vacaciones * 20); // Restar 20 USD por día de vacaciones
+
+                // Mostrar resultados
+                box_dashed.style.display = "block";
+
+                var p_nombre = document.querySelector("#p_nombre span");
+                var p_apellidos = document.querySelector("#p_apellidos span");
+                var p_edad = document.querySelector("#p_edad span");
+                var p_horas_trabajadas = document.querySelector("#p_horas_trabajadas span");
+                var p_cargo = document.querySelector("#p_cargo span");
+                var p_vacaciones = document.querySelector("#p_vacaciones span");
+                var p_bono_extra = document.querySelector("#p_bono_extra span");
+                var p_sueldo = document.querySelector("#p_sueldo span");
+
+                p_nombre.innerHTML = nombre;
+                p_apellidos.innerHTML = apellidos;
+                p_edad.innerHTML = edad;
+                p_horas_trabajadas.innerHTML = horasTrabajadas;
+                p_cargo.innerHTML = cargo;
+                p_vacaciones.innerHTML = vacaciones;
+                p_bono_extra.innerHTML = bonoExtra;
+                p_sueldo.innerHTML = sueldoTotal.toFixed(2) + " USD"; // Mostrar el sueldo con dos decimales
+            });
+        });
+    </script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+
+</body></html>
